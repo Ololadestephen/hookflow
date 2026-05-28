@@ -219,12 +219,8 @@ export default function HomePage() {
         </div>
 
         <div className="relative z-10 w-full max-w-4xl px-0 text-center md:px-gutter">
-          <div className="mx-auto mb-6 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-surface-container/70 px-3 py-1.5 backdrop-blur-md md:mb-8">
-            <span className="h-2 w-2 rounded-full bg-primary" />
-            <span className="font-label-md text-[10px] uppercase tracking-[0.18em] text-primary md:text-label-md">
-              Self-protecting LP pools
-            </span>
-          </div>
+          
+        
 
           <h1 className="mx-auto mb-5 max-w-[680px] font-display-lg text-[40px] leading-[0.98] tracking-tight text-on-background sm:text-[52px] md:max-w-none md:text-[64px]">
             Protect liquidity with adaptive <span className="text-primary">Uniswap v4</span> hooks
