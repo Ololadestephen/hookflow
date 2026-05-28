@@ -1,10 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { useLayoutEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 
-const RING_RADIUS = 198;
-const PARTICLE_COUNT = 220;
+const RING_RADIUS = 180;
+const PARTICLE_COUNT = 200;
 
 type Particle = {
   angle: number;
@@ -57,7 +57,7 @@ function createPulse(): Pulse {
 export default function HomePage() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     const currentCanvas = canvasRef.current;
     const context = currentCanvas?.getContext("2d");
     if (!currentCanvas || !context) return;
@@ -66,7 +66,6 @@ export default function HomePage() {
 
     let width = 0;
     let height = 0;
-    let dpr = 1;
     let centerX = 0;
     let centerY = 0;
     let particles: Particle[] = [];
@@ -76,7 +75,7 @@ export default function HomePage() {
     function init() {
       width = window.innerWidth;
       height = window.innerHeight;
-      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
       drawingCanvas.width = Math.floor(width * dpr);
       drawingCanvas.height = Math.floor(height * dpr);
       drawingCanvas.style.width = `${width}px`;
@@ -85,20 +84,23 @@ export default function HomePage() {
       drawingContext.lineCap = "round";
       drawingContext.lineJoin = "round";
       centerX = width / 2;
-      centerY = height * 0.54;
+      centerY = height / 2;
       particles = Array.from({ length: PARTICLE_COUNT }, createParticle);
+      for (let step = 0; step < 18; step += 1) {
+        particles.forEach(updateParticle);
+      }
     }
 
     function drawPoolRing() {
       drawingContext.beginPath();
       drawingContext.arc(centerX, centerY, RING_RADIUS, 0, Math.PI * 2);
-      drawingContext.strokeStyle = "rgba(78, 222, 163, 0.06)";
-      drawingContext.lineWidth = 9;
+      drawingContext.strokeStyle = "rgba(78, 222, 163, 0.05)";
+      drawingContext.lineWidth = 10;
       drawingContext.stroke();
 
       drawingContext.beginPath();
       drawingContext.arc(centerX, centerY, RING_RADIUS, 0, Math.PI * 2);
-      drawingContext.strokeStyle = "rgba(78, 222, 163, 0.12)";
+      drawingContext.strokeStyle = "rgba(78, 222, 163, 0.1)";
       drawingContext.lineWidth = 1;
       drawingContext.setLineDash([5, 15]);
       drawingContext.stroke();
@@ -126,13 +128,13 @@ export default function HomePage() {
       for (let i = 1; i < particle.history.length; i += 1) {
         drawingContext.lineTo(particle.history[i].x, particle.history[i].y);
       }
-      drawingContext.strokeStyle = `rgba(78, 222, 163, ${particle.opacity * 0.56})`;
+      drawingContext.strokeStyle = `rgba(78, 222, 163, ${particle.opacity * 0.5})`;
       drawingContext.lineWidth = particle.size;
       drawingContext.stroke();
 
       drawingContext.beginPath();
       drawingContext.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
-      drawingContext.fillStyle = `rgba(78, 222, 163, ${particle.opacity * 1.06})`;
+      drawingContext.fillStyle = `rgba(78, 222, 163, ${particle.opacity})`;
       drawingContext.fill();
     }
 
@@ -145,7 +147,7 @@ export default function HomePage() {
     }
 
     function drawPulse(pulse: Pulse) {
-      const gradient = drawingContext.createRadialGradient(pulse.x, pulse.y, 0, pulse.x, pulse.y, 23);
+      const gradient = drawingContext.createRadialGradient(pulse.x, pulse.y, 0, pulse.x, pulse.y, 25);
       gradient.addColorStop(0, `rgba(111, 251, 190, ${pulse.life * 0.8})`);
       gradient.addColorStop(1, "rgba(111, 251, 190, 0)");
 
@@ -177,7 +179,7 @@ export default function HomePage() {
     }
 
     function animate() {
-      if (Math.random() < 0.035) {
+      if (Math.random() < 0.02) {
         pulses.push(createPulse());
       }
       drawFrame();
@@ -207,8 +209,8 @@ export default function HomePage() {
 
       <section className="relative flex h-screen flex-col items-center justify-center overflow-hidden px-margin-mobile md:px-0">
         <div className="pointer-events-none absolute inset-0 z-0 flex items-center justify-center">
-          <div className="orb-glow absolute h-[760px] w-[760px] rounded-full opacity-32" />
-          <canvas ref={canvasRef} className="h-full w-full opacity-90" id="liquidity-currents-canvas" />
+          <div className="orb-glow absolute h-[800px] w-[800px] rounded-full opacity-40" />
+          <canvas ref={canvasRef} className="h-full w-full" id="liquidity-currents-canvas" />
         </div>
 
         <div className="relative z-10 max-w-4xl px-gutter text-center">
