@@ -78,8 +78,8 @@ export default function HomePage() {
       width = window.innerWidth;
       height = window.innerHeight;
       const isMobile = width < 768;
-      currentRingRadius = isMobile ? 128 : RING_RADIUS;
-      currentParticleCount = isMobile ? 150 : PARTICLE_COUNT;
+      currentRingRadius = isMobile ? 104 : RING_RADIUS;
+      currentParticleCount = isMobile ? 120 : PARTICLE_COUNT;
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
       drawingCanvas.width = Math.floor(width * dpr);
       drawingCanvas.height = Math.floor(height * dpr);
@@ -89,7 +89,7 @@ export default function HomePage() {
       drawingContext.lineCap = "round";
       drawingContext.lineJoin = "round";
       centerX = width / 2;
-      centerY = height * (isMobile ? 0.21 : 0.48);
+      centerY = height * (isMobile ? 0.3 : 0.48);
       particles = Array.from({ length: currentParticleCount }, createParticle);
       for (let step = 0; step < 24; step += 1) {
         particles.forEach(updateParticle);
@@ -204,24 +204,24 @@ export default function HomePage() {
 
   return (
     <main className="min-h-screen overflow-x-hidden bg-background text-on-background selection:bg-primary selection:text-on-primary">
-      <header className="fixed left-1/2 top-3 z-40 flex w-[calc(100%-1.5rem)] max-w-[420px] -translate-x-1/2 items-center justify-center rounded-full border border-white/8 bg-surface/85 px-4 py-3 backdrop-blur-md md:left-0 md:top-0 md:w-full md:max-w-none md:translate-x-0 md:justify-end md:rounded-none md:border-0 md:border-b md:border-white/5 md:bg-surface/60 md:px-margin-desktop md:py-0 md:h-16">
+      <header className="fixed right-3 top-3 z-40 flex items-center justify-end md:right-0 md:top-0 md:h-16 md:w-full md:rounded-none md:border-0 md:border-b md:border-white/5 md:bg-surface/60 md:px-margin-desktop md:py-0">
         <div className="flex items-center gap-6">
-          <button className="cursor-pointer rounded-full bg-primary px-4 py-2 font-label-md text-[11px] text-on-primary transition-transform hover:scale-105 active:opacity-80 md:rounded-lg md:px-6 md:text-label-md">
+          <button className="cursor-pointer rounded-full border border-primary/25 bg-primary px-3 py-2 font-label-md text-[10px] text-on-primary shadow-[0_0_18px_rgba(78,222,163,0.2)] transition-transform hover:scale-105 active:opacity-80 md:rounded-lg md:px-6 md:py-2 md:text-label-md md:shadow-none">
             X Layer Mainnet
           </button>
         </div>
       </header>
 
-      <section className="relative flex min-h-[100svh] flex-col items-center justify-center overflow-hidden px-4 pb-12 pt-24 md:px-0 md:pb-0 md:pt-16">
+      <section className="relative flex min-h-[100svh] flex-col items-center justify-center overflow-hidden px-4 pb-12 pt-20 md:px-0 md:pb-0 md:pt-16">
         <div className="pointer-events-none absolute inset-0 z-0 flex items-center justify-center">
-          <div className="orb-glow absolute h-[640px] w-[640px] rounded-full opacity-30 md:h-[800px] md:w-[800px] md:opacity-40" />
-          <canvas ref={canvasRef} className="h-full w-full opacity-90 md:opacity-100" id="liquidity-currents-canvas" />
+          <div className="orb-glow absolute h-[520px] w-[520px] rounded-full opacity-22 md:h-[800px] md:w-[800px] md:opacity-40" />
+          <canvas ref={canvasRef} className="h-full w-full opacity-80 md:opacity-100" id="liquidity-currents-canvas" />
         </div>
 
         <div className="relative z-10 w-full max-w-4xl px-0 text-center md:px-gutter">
           <div className="mx-auto mb-6 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-surface-container/70 px-3 py-1.5 backdrop-blur-md md:mb-8">
             <span className="h-2 w-2 rounded-full bg-primary" />
-            <span className="font-label-md text-[11px] uppercase tracking-[0.18em] text-primary md:text-label-md">
+            <span className="font-label-md text-[10px] uppercase tracking-[0.18em] text-primary md:text-label-md">
               Self-protecting LP pools
             </span>
           </div>
