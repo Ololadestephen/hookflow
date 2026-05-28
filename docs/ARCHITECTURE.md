@@ -173,7 +173,7 @@ Small trades pay no size premium. Medium and large trades add configured premium
 
 ## Toxicity Score
 
-The toxicity score is intentionally lightweight for the MVP.
+The toxicity score is intentionally lightweight and explainable.
 
 Inputs:
 
@@ -284,7 +284,7 @@ Emitted when a named preset is applied.
 
 ## Security Model
 
-The hook keeps the MVP intentionally narrow.
+HookFlow keeps the hook surface focused.
 
 Controls:
 
@@ -294,10 +294,6 @@ Controls:
 - no oracle dependency,
 - no per-user reputation or identity logic,
 - no token custody in the hook.
-
-Main limitation:
-
-The current toxicity model is heuristic. It is explainable and demonstrable, but it is not a full market microstructure model.
 
 ## Deployment Model
 
@@ -313,15 +309,4 @@ The deployment scripts use CREATE2 salt mining so the deployed hook address has 
 Scripts:
 
 - `DeployHookFlow.s.sol`: deploys/configures a hook and pool key.
-- `DemoHookFlow.s.sol`: deploys a full testnet demo stack with mock tokens, liquidity, and swaps.
-
-## Why This Architecture Works For The Hackathon
-
-HookFlow is small enough to audit quickly, but complete enough to show real hook behavior.
-
-It optimizes for the judging requirements:
-
-- innovation: flow-aware fee segmentation,
-- market potential: better LP compensation during risky flow,
-- completion: deployed hook, deployed pool, verified address, real swaps.
-
+- `RunHookFlowMainnetProof.s.sol`: runs the X Layer mainnet proof flow.

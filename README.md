@@ -29,6 +29,10 @@ effectiveFee = min(effectiveFee, maxFee)
 
 ## Live X Layer Mainnet Proof
 
+Live app:
+
+- https://xhookflow.vercel.app/
+
 Network:
 
 - X Layer mainnet
@@ -72,21 +76,14 @@ Full deployment details are in [docs/MAINNET_DEPLOYMENT.md](docs/MAINNET_DEPLOYM
 
 The Next.js frontend is in [frontend](frontend).
 
+Deployed app: https://xhookflow.vercel.app/
+
 Routes:
 
 - `/`: landing page
 - `/dashboard`: deployed proof, live RPC block, setup transactions, behavior transactions
 - `/create`: default USDT0/WOKB LP flow and custom-pair preparation flow
 - `/protect`: LP-facing explanation of how HookFlow protection works
-
-Create page behavior:
-
-- default pair shows `USDT0 / WOKB` without requiring contract-address input
-- custom pair mode exposes token contract-address fields
-- presets map to real hook values: stable `0`, volatile `1`, launch `2`, long-tail `3`
-- token approvals use the verified liquidity router
-- add-liquidity calls the router with max token spend and deadline guards
-- raw wallet and viem errors are converted into user-friendly messages
 
 ## Architecture
 
@@ -118,16 +115,6 @@ afterSwap
 
 Detailed architecture is in [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
 
-## Security Notes
-
-HookFlow includes several hardening choices made during the hackathon:
-
-- flow state records executed swap deltas instead of trusting requested swap size
-- public preset application is operator-gated to reduce pool-squatting and preset front-running risk
-- liquidity router checks ERC20 transfer return values
-- liquidity router enforces max token spend and deadline checks
-- frontend CSP is strict in production while allowing the Next.js dev runtime locally
-
 ## Presets
 
 HookFlow includes four bounded presets:
@@ -136,19 +123,6 @@ HookFlow includes four bounded presets:
 - **Volatile Pair:** balanced protection for active token pairs
 - **Launch Pool:** aggressive early defense for new assets and uncertain liquidity
 - **Long-Tail Pool:** stronger protection for thin liquidity and volatile markets
-
-## Hackathon Requirement Checklist
-
-| Requirement | Status | Evidence |
-| --- | --- | --- |
-| Built around Uniswap v4 hooks | Complete | `HookFlowHook` implements `beforeSwap` and `afterSwap` hook behavior. |
-| Deployed on X Layer | Complete | Hook, pool, factory, and router are deployed on X Layer mainnet. |
-| At least one v4 pool deployed | Complete | USDT0/WOKB v4 pools are initialized on X Layer mainnet. |
-| Verifiable contract address | Complete | Main proof hook and public hook are verified on OKLink. |
-| Hook behavior triggered by real transactions | Complete | Mainnet swaps triggered fee override, size premium, toxicity premium, and defensive cooldown. |
-| Substantial new hook logic | Complete | Dynamic fee coordination, size-aware premium, toxic-flow scoring, cooldown, and bounded presets. |
-| Social presence | Complete | Dedicated project X account and project posts created. |
-| Submission package | Ready | Repo, frontend, deployed addresses, proof txs, and demo script are prepared. |
 
 ## Local Development
 
@@ -177,29 +151,9 @@ Run Solidity tests:
 forge test --offline
 ```
 
-## Vercel Deployment
-
-Recommended Vercel settings:
-
-- Root Directory: `frontend`
-- Install Command: `npm install`
-- Build Command: `npm run build`
-- Output Directory: default
-
-No frontend environment variables are required for the current deployment.
-
-Do not add deployment secrets such as `PRIVATE_KEY` or `OKLINK_API_KEY` to Vercel. Those are only for local Foundry deployment and verification scripts.
-
-## Known MVP Limits
-
-- The current add-liquidity flow still uses Uniswap v4 tick and liquidity internals under the hood.
-- The UI hides technical range values by default, but a production version should calculate liquidity from token amounts and human-readable min/max prices.
-- Custom-pair preset application is operator-gated to avoid pool squatting. The live USDT0/WOKB LP flow remains open.
-
 ## Roadmap
 
-- Calculate liquidity from user-entered token amounts and price ranges.
-- Add indexed event views for live fee, toxicity, cooldown, and pool-risk monitoring.
-- Add deeper custom-token validation for self-serve pair creation.
-- Add more invariant and fuzz tests around edge-case swaps, custom tokens, and liquidity operations.
-- Expand the dashboard into a full HookFlow LP console.
+- Support more LPs, token pairs, and Uniswap v4 liquidity tools.
+- Add richer pool-risk monitoring for live fees, toxicity, cooldowns, and flow trends.
+- Improve custom-pair onboarding with stronger token validation and safer defaults.
+- Expand HookFlow into a full LP protection console for X Layer.
