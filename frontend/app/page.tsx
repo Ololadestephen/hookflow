@@ -199,33 +199,33 @@ export default function HomePage() {
 
   return (
     <main className="min-h-screen overflow-x-hidden bg-background text-on-background selection:bg-primary selection:text-on-primary">
-      <header className="fixed right-0 top-0 z-40 flex h-16 w-full items-center justify-end bg-surface/60 px-margin-mobile backdrop-blur-md md:px-margin-desktop">
+      <header className="fixed right-0 top-0 z-40 flex h-14 w-full items-center justify-center bg-surface/60 px-margin-mobile backdrop-blur-md md:h-16 md:justify-end md:px-margin-desktop">
         <div className="flex items-center gap-6">
-          <button className="cursor-pointer rounded-lg bg-primary px-6 py-2 font-label-md text-label-md text-on-primary transition-transform hover:scale-105 active:opacity-80">
+          <button className="cursor-pointer rounded-lg bg-primary px-4 py-2 font-label-md text-[11px] text-on-primary transition-transform hover:scale-105 active:opacity-80 md:px-6 md:text-label-md">
             X Layer Mainnet
           </button>
         </div>
       </header>
 
-      <section className="relative flex h-screen flex-col items-center justify-center overflow-hidden px-margin-mobile md:px-0">
+      <section className="relative flex min-h-[100svh] flex-col items-center justify-center overflow-hidden px-4 pb-10 pt-20 md:px-0 md:pb-0 md:pt-16">
         <div className="pointer-events-none absolute inset-0 z-0 flex items-center justify-center">
           <div className="orb-glow absolute h-[800px] w-[800px] rounded-full opacity-40" />
           <canvas ref={canvasRef} className="h-full w-full" id="liquidity-currents-canvas" />
         </div>
 
-        <div className="relative z-10 max-w-4xl px-gutter text-center">
-          <h1 className="mb-6 font-display-lg text-display-lg tracking-tight text-on-background md:text-[64px]">
+        <div className="relative z-10 w-full max-w-4xl px-0 text-center md:px-gutter">
+          <h1 className="mx-auto mb-5 max-w-[680px] font-display-lg text-[44px] leading-[1.02] tracking-normal text-on-background sm:text-[52px] md:max-w-none md:text-[64px]">
             Protect liquidity with adaptive <span className="text-primary">Uniswap v4</span> hooks
           </h1>
 
-          <p className="mx-auto mb-10 max-w-2xl font-body-lg text-body-lg leading-relaxed text-on-surface-variant">
+          <p className="mx-auto mb-8 max-w-2xl font-body-lg text-base leading-7 text-on-surface-variant md:mb-10 md:text-body-lg">
             HookFlow lets LPs launch X Layer pools with adaptive fees, size-aware pricing, and toxic-flow protection.
             Choose a safe preset, add liquidity, and let risky flow pay more.
           </p>
 
-          <div className="flex flex-col items-center justify-center gap-4 md:flex-row">
+          <div className="mx-auto flex max-w-md flex-col items-stretch justify-center gap-3 md:max-w-none md:flex-row md:items-center md:gap-4">
             <Link
-              className="group flex w-full items-center justify-center gap-2 rounded-none bg-primary px-10 py-4 font-label-md text-label-md text-on-primary transition-all hover:shadow-[0_0_20px_rgba(78,222,163,0.3)] md:w-auto"
+              className="group flex w-full items-center justify-center gap-2 rounded-none bg-primary px-8 py-4 font-label-md text-label-md text-on-primary transition-all hover:shadow-[0_0_20px_rgba(78,222,163,0.3)] md:w-auto md:px-10"
               href="/dashboard"
             >
               Dashboard
@@ -233,7 +233,7 @@ export default function HomePage() {
             </Link>
 
             <Link
-              className="flex w-full items-center justify-center gap-2 rounded-none border border-primary/40 px-10 py-4 font-label-md text-label-md text-primary transition-all hover:bg-primary/5 md:w-auto"
+              className="flex w-full items-center justify-center gap-2 rounded-none border border-primary/40 px-8 py-4 font-label-md text-label-md text-primary transition-all hover:bg-primary/5 md:w-auto md:px-10"
               href="/create"
             >
               Create Pool

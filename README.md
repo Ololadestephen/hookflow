@@ -1,92 +1,31 @@
 # HookFlow
 
-HookFlow is a flow-aware Uniswap v4 hook on X Layer.
+HookFlow is an adaptive Uniswap v4 hook for LP protection on X Layer.
 
-It turns a static AMM pool into an adaptive market that prices flow quality in real time: small benign trades stay cheap, larger trades pay more, repeated one-sided flow pays more, and toxic bursts trigger a temporary defensive fee mode.
+It turns a static-fee liquidity pool into a flow-aware pool: small benign trades stay close to the base fee, larger trades pay a size premium, repeated one-sided flow pays a toxicity premium, and toxic bursts can trigger a temporary defensive cooldown.
 
-## Why It Matters
+## Why HookFlow
 
-Static fee tiers are blunt. In a normal AMM pool, a small retail swap and a large one-sided toxic flow can pay the same fee rate. That can leave LPs underpaid when the pool is taking more risk.
+AMM fee tiers are usually blunt. A small organic swap and a large one-sided trade can pay the same fee rate even though they create very different risk for LPs.
 
-HookFlow uses the Uniswap v4 hook mechanism to adjust fees at swap time, giving LPs better compensation during risky flow while preserving the normal swap UX for traders.
+HookFlow uses Uniswap v4 hooks to price that risk at swap time. The goal is simple:
 
-The core claim is intentionally narrow:
+> Riskier flow should pay more, so LPs are not underpaid when the pool is taking more risk.
 
-> HookFlow helps LPs avoid being underpaid for risky flow.
+## Core Hook Logic
 
-## What The Hook Does
+HookFlow combines three LP-protection skills:
 
-HookFlow combines three skills into one hook:
+- **Dynamic fee skill:** returns a Uniswap v4 `beforeSwap` fee override for each swap.
+- **Size-aware trade skill:** adds a premium when a trade crosses configured size thresholds.
+- **Toxic-flow protection skill:** tracks short-term directional flow, raises fees during one-sided bursts, and activates defensive cooldown when toxicity is high.
 
-- Dynamic fee coordination: computes the final per-swap LP fee and returns a v4 fee override.
-- Size-aware trade pricing: adds a premium when a trade crosses configured size thresholds.
-- LP protection: tracks short-term one-sided flow, raises a toxicity premium, and activates defensive cooldown when toxicity is high.
-
-The fee model is:
+Fee model:
 
 ```text
 effectiveFee = baseFee + sizePremium + toxicityPremium
 effectiveFee = min(effectiveFee, maxFee)
 ```
-
-## Current Status
-
-Implemented:
-
-- real Uniswap v4 `IHooks` interface,
-- `beforeSwap` dynamic fee override,
-- `afterSwap` flow-state update,
-- size premium,
-- toxicity premium,
-- defensive cooldown,
-- `FlowAssessed` event,
-- named pool presets,
-- production-oriented config bounds,
-- CREATE2 hook-address mining for v4 permission bits,
-- X Layer mainnet deployment,
-- USDT0/WOKB v4 pool initialization,
-- mainnet demo liquidity,
-- real mainnet swaps that trigger different hook outcomes,
-- public self-serve hook deployment,
-- verified liquidity router for LP deposits,
-- self-serve USDT0/WOKB pool initialization and add-liquidity proof,
-- Next.js frontend with landing page, dashboard, LP protection explainer, and create-pool flow,
-- wallet connection for X Layer mainnet,
-- default USDT0/WOKB pool path,
-- custom-pair path for entering token contract addresses,
-- safe preset selection wired to `applySafePreset`,
-- approval and liquidity transaction buttons,
-- friendly transaction error messages.
-
-Verification:
-
-```sh
-forge test --offline
-```
-
-Current suite: `12` tests passing.
-
-Frontend verification:
-
-```sh
-cd frontend
-npm run build
-```
-
-The frontend build passes.
-
-## Hackathon Requirement Checklist
-
-| Requirement | Status | Evidence |
-| --- | --- | --- |
-| Built around Uniswap v4 hooks | Complete | `HookFlowHook` implements v4 hook behavior through `beforeSwap` and `afterSwap`. |
-| Deployed on X Layer | Complete | Hook, pool, factory, and router are deployed on X Layer mainnet. |
-| At least one v4 pool deployed | Complete | USDT0/WOKB v4 pools are initialized on X Layer mainnet. |
-| Verifiable contract address | Complete | Main proof hook and public self-serve hook are verified on OKLink. |
-| Hook behavior triggerable by real transactions | Complete | Mainnet swaps triggered fee override, size premium, toxicity premium, and defensive cooldown. |
-| Substantial new hook logic | Complete | Dynamic fee coordination, size-aware premium, toxic-flow scoring, defensive cooldown, and bounded presets. |
-| Social presence | External task | Create and post from a dedicated X account before submission. |
-| Google Form submission | External task | Submit before the hackathon deadline. |
 
 ## Live X Layer Mainnet Proof
 
@@ -95,7 +34,7 @@ Network:
 - X Layer mainnet
 - Chain ID: `196`
 
-Contracts:
+Main proof deployment:
 
 - HookFlowHook: `0x826EBCEf75EB77103930282690C839B17AE7C0C0`
 - PoolManager: `0x360E68faCcca8cA495c1B759Fd9EEe466db9FB32`
@@ -103,50 +42,19 @@ Contracts:
 - Token0, USDT0: `0x779Ded0c9e1022225f8E0630b35a9b54bE713736`
 - Token1, WOKB: `0xe538905cf8410324e03A5A23C1c177a474D59b2b`
 
-The mainnet hook and pool are deployed on the official X Layer Uniswap v4 PoolManager. The HookFlowHook source is verified on OKLink.
-
-## Public Self-Serve Deployment
-
-HookFlow also has a public-safe deployment for LP onboarding:
+Public LP deployment:
 
 - Public HookFlowHook: `0xC18e6daa59708C1Be5567C350f176319Ee4580C0`
 - HookFlowLiquidityRouter: `0x47a4bfA07471baBdC124cbf70020EBD6CcddBD9D`
 - Public factory: `0xf82337ba8E19b5a4A0E33434E2697af245D84BCe`
 - Self-serve pool ID: `0xb13a28deaf008674a2c239235c06028f103512e03503c09559daa13c6b0905a7`
-- Add-liquidity proof: `0x11d1b9f10d963514bc11d6271071caf6b3bc7956e33fd6412409aa6087900bc5`
+- Add-liquidity proof tx: `0x11d1b9f10d963514bc11d6271071caf6b3bc7956e33fd6412409aa6087900bc5`
 
-The public deployment keeps LP onboarding onchain, but `applySafePreset` is now restricted to the hook owner to prevent pool squatting and preset front-running. The public LP flow remains open for the live USDT0/WOKB pool, while custom-pair preset application is operator-gated.
+The proof hook, public hook, factory, and liquidity router are deployed and verifiable on X Layer mainnet. The live USDT0/WOKB pool demonstrates real hook-triggered behavior.
 
-## Frontend Console
+## Behavior Proof
 
-The frontend lives in:
-
-- [frontend](/Users/apple/Documents/Hookflow/frontend:1)
-
-Routes:
-
-- `/`: landing page focused on self-protecting Uniswap v4 pools.
-- `/create`: create/fund flow for LPs.
-- `/dashboard`: proof dashboard with deployed addresses, live RPC block, setup transactions, and behavior transactions.
-- `/protect`: user-facing explanation of how LP protection works.
-
-Create page behavior:
-
-- Default pair shows `USDT0 / WOKB` without requiring users to paste contract addresses.
-- Custom pair mode exposes token contract address inputs.
-- Presets map to real hook values: stable `0`, volatile `1`, launch `2`, long-tail `3`.
-- `Apply Safe Preset` calls `applySafePreset(poolId, preset)` for operator-approved custom pools.
-- `Initialize Pool` initializes the selected v4 pool through the official PoolManager.
-- Token approvals use the verified liquidity router.
-- `Add Liquidity` calls the verified router's `modifyLiquidity` path with max token spend and deadline guards.
-- Raw viem errors are converted into user-friendly transaction messages.
-- Post-swap flow state now records executed swap deltas instead of the raw requested swap size.
-
-Known MVP limitation:
-
-- The current add-liquidity flow still uses Uniswap v4 internal tick and liquidity values. The UI hides these behind "Show technical values", but the next production step is to calculate liquidity from human inputs like token amounts and min/max price. If a wallet has a tiny balance, a liquidity transaction can revert with `ERC20: transfer amount exceeds balance`; the UI now explains that as a balance issue instead of dumping raw calldata.
-
-Observed swap progression:
+Observed mainnet swap progression:
 
 | Step | Applied fee pips | Size bucket | Toxic score | Defensive mode |
 | --- | ---: | ---: | ---: | --- |
@@ -158,16 +66,37 @@ Observed swap progression:
 | Defensive trigger swap | `11000` | `0` | `82` | `true` |
 | Defensive cooldown swap | `11000` | `0` | `89` | `true` |
 
-Full proof is in [docs/MAINNET_DEPLOYMENT.md](/Users/apple/Documents/Hookflow/docs/MAINNET_DEPLOYMENT.md:1).
+Full deployment details are in [docs/MAINNET_DEPLOYMENT.md](docs/MAINNET_DEPLOYMENT.md).
+
+## Frontend
+
+The Next.js frontend is in [frontend](frontend).
+
+Routes:
+
+- `/`: landing page
+- `/dashboard`: deployed proof, live RPC block, setup transactions, behavior transactions
+- `/create`: default USDT0/WOKB LP flow and custom-pair preparation flow
+- `/protect`: LP-facing explanation of how HookFlow protection works
+
+Create page behavior:
+
+- default pair shows `USDT0 / WOKB` without requiring contract-address input
+- custom pair mode exposes token contract-address fields
+- presets map to real hook values: stable `0`, volatile `1`, launch `2`, long-tail `3`
+- token approvals use the verified liquidity router
+- add-liquidity calls the router with max token spend and deadline guards
+- raw wallet and viem errors are converted into user-friendly messages
 
 ## Architecture
 
 Core contracts:
 
-- [HookFlowHook.sol](/Users/apple/Documents/Hookflow/src/HookFlowHook.sol:1): Uniswap v4 hook entrypoint, pool config, flow state, events.
-- [HookFlowFeeLogic.sol](/Users/apple/Documents/Hookflow/src/libraries/HookFlowFeeLogic.sol:1): size buckets, toxicity scoring, fee quote, cooldown logic.
-- [HookFlowPresetLib.sol](/Users/apple/Documents/Hookflow/src/libraries/HookFlowPresetLib.sol:1): stable, volatile, launch, and long-tail pool presets.
-- [HookFlowTypes.sol](/Users/apple/Documents/Hookflow/src/types/HookFlowTypes.sol:1): config, state, preset, and quote types.
+- [src/HookFlowHook.sol](src/HookFlowHook.sol): Uniswap v4 hook entrypoint, pool config, flow state, events
+- [src/HookFlowLiquidityRouter.sol](src/HookFlowLiquidityRouter.sol): LP liquidity helper with max-spend and deadline checks
+- [src/libraries/HookFlowFeeLogic.sol](src/libraries/HookFlowFeeLogic.sol): size buckets, toxicity scoring, fee quote, cooldown logic
+- [src/libraries/HookFlowPresetLib.sol](src/libraries/HookFlowPresetLib.sol): stable, volatile, launch, and long-tail presets
+- [src/types/HookFlowTypes.sol](src/types/HookFlowTypes.sol): config, state, preset, and quote types
 
 Hook lifecycle:
 
@@ -175,103 +104,102 @@ Hook lifecycle:
 beforeSwap
   -> load PoolConfig and PoolFlowState
   -> preview size bucket and toxicity score
-  -> calculate fee
+  -> calculate adaptive fee
   -> emit FlowAssessed
   -> return LPFeeLibrary.OVERRIDE_FEE_FLAG | fee
 
 afterSwap
+  -> update flow state from executed swap delta
   -> update directional volume
   -> update same-direction streak
   -> update last toxicity score
   -> set defensive cooldown if threshold is crossed
 ```
 
-Detailed architecture is in [docs/ARCHITECTURE.md](/Users/apple/Documents/Hookflow/docs/ARCHITECTURE.md:1).
+Detailed architecture is in [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
 
-## Why HookFlow Is Different
+## Security Notes
 
-Most AMM pools price all flow the same inside one fee tier. HookFlow segments flow inside the pool.
+HookFlow includes several hardening choices made during the hackathon:
 
-It asks:
+- flow state records executed swap deltas instead of trusting requested swap size
+- public preset application is operator-gated to reduce pool-squatting and preset front-running risk
+- liquidity router checks ERC20 transfer return values
+- liquidity router enforces max token spend and deadline checks
+- frontend CSP is strict in production while allowing the Next.js dev runtime locally
 
-- Is this trade small or large?
-- Is recent flow balanced or one-sided?
-- Should LPs be compensated more right now?
-- Should the pool temporarily defend itself?
+## Presets
 
-That makes HookFlow more than a dynamic fee demo. It is a pool-level risk control layer.
+HookFlow includes four bounded presets:
 
-## Who Uses It
+- **Stable Pair:** lower fees and softer toxic-flow response for correlated assets
+- **Volatile Pair:** balanced protection for active token pairs
+- **Launch Pool:** aggressive early defense for new assets and uncertain liquidity
+- **Long-Tail Pool:** stronger protection for thin liquidity and volatile markets
 
-LPs use HookFlow to earn more when flow is riskier.
+## Hackathon Requirement Checklist
 
-Token teams use HookFlow for launch pools, volatile pools, and long-tail assets that may face bursty flow.
+| Requirement | Status | Evidence |
+| --- | --- | --- |
+| Built around Uniswap v4 hooks | Complete | `HookFlowHook` implements `beforeSwap` and `afterSwap` hook behavior. |
+| Deployed on X Layer | Complete | Hook, pool, factory, and router are deployed on X Layer mainnet. |
+| At least one v4 pool deployed | Complete | USDT0/WOKB v4 pools are initialized on X Layer mainnet. |
+| Verifiable contract address | Complete | Main proof hook and public hook are verified on OKLink. |
+| Hook behavior triggered by real transactions | Complete | Mainnet swaps triggered fee override, size premium, toxicity premium, and defensive cooldown. |
+| Substantial new hook logic | Complete | Dynamic fee coordination, size-aware premium, toxic-flow scoring, cooldown, and bounded presets. |
+| Social presence | Complete | Dedicated project X account and project posts created. |
+| Submission package | Ready | Repo, frontend, deployed addresses, proof txs, and demo script are prepared. |
 
-Market makers use HookFlow because the rules are transparent: fee parameters, thresholds, cooldowns, and flow events are inspectable.
+## Local Development
 
-Traders keep the standard swap experience. The principle is simple: benign small flow should not subsidize toxic large flow.
+Install frontend dependencies:
 
-## Pool Presets
+```sh
+cd frontend
+npm install
+```
 
-HookFlow includes four presets:
+Run the frontend:
 
-- Stable pair: lower fees and softer defensive behavior.
-- Volatile pair: stronger toxicity premium and higher max fee.
-- Launch pool: aggressive defense for early liquidity.
-- Long-tail pool: high protection for thin and volatile markets.
+```sh
+npm run dev
+```
 
-Pool owners can also set custom bounded configs.
+Build the frontend:
+
+```sh
+npm run build
+```
+
+Run Solidity tests:
+
+```sh
+forge test --offline
+```
+
+## Vercel Deployment
+
+Recommended Vercel settings:
+
+- Root Directory: `frontend`
+- Install Command: `npm install`
+- Build Command: `npm run build`
+- Output Directory: default
+
+No frontend environment variables are required for the current deployment.
+
+Do not add deployment secrets such as `PRIVATE_KEY` or `OKLINK_API_KEY` to Vercel. Those are only for local Foundry deployment and verification scripts.
+
+## Known MVP Limits
+
+- The current add-liquidity flow still uses Uniswap v4 tick and liquidity internals under the hood.
+- The UI hides technical range values by default, but a production version should calculate liquidity from token amounts and human-readable min/max prices.
+- Custom-pair preset application is operator-gated to avoid pool squatting. The live USDT0/WOKB LP flow remains open.
 
 ## Roadmap
 
-Phase 1: Onchain MVP
-
-- v4 hook
-- dynamic fee override
-- size premium
-- toxicity premium
-- defensive cooldown
-- onchain proof
-
-Phase 2: Public self-serve MVP
-
-- public safe presets
-- verified liquidity router
-- default USDT0/WOKB pool flow
-- custom token pair flow
-- wallet transaction UI
-- dashboard proof trail
-
-Phase 3: Production hardening
-
-- stricter config bounds
-- stronger invariant and fuzz tests
-- automatic liquidity sizing from token amounts
-- human price range inputs instead of raw ticks
-- indexed hook events for live pool monitoring
-- clearer failure handling for low balances and missing approvals
-
-Phase 4: HookFlow Console
-
-- create HookFlow pools
-- select presets
-- monitor current fee
-- monitor toxicity score
-- inspect defensive mode and flow history
-
-Phase 5: Flow intelligence layer
-
-- pool health feed
-- toxicity leaderboard
-- risk reports
-- configuration recommendations
-
-## Docs
-
-- [Project strategy](/Users/apple/Documents/Hookflow/docs/PROJECT_STRATEGY.md:1)
-- [Hackathon submission](/Users/apple/Documents/Hookflow/docs/HACKATHON_SUBMISSION.md:1)
-- [Submission core](/Users/apple/Documents/Hookflow/docs/SUBMISSION_CORE.md:1)
-- [Architecture](/Users/apple/Documents/Hookflow/docs/ARCHITECTURE.md:1)
-- [Deployment](/Users/apple/Documents/Hookflow/docs/DEPLOYMENT.md:1)
-- [Mainnet proof](/Users/apple/Documents/Hookflow/docs/MAINNET_DEPLOYMENT.md:1)
-- [Functional frontend MVP](/Users/apple/Documents/Hookflow/docs/FUNCTIONAL_FRONTEND_MVP.md:1)
+- Calculate liquidity from user-entered token amounts and price ranges.
+- Add indexed event views for live fee, toxicity, cooldown, and pool-risk monitoring.
+- Add deeper custom-token validation for self-serve pair creation.
+- Add more invariant and fuzz tests around edge-case swaps, custom tokens, and liquidity operations.
+- Expand the dashboard into a full HookFlow LP console.

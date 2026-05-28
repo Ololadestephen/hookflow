@@ -41,13 +41,13 @@ export default function ProtectPage() {
   return (
     <main className="min-h-screen bg-background text-on-background lg:grid lg:grid-cols-[250px_minmax(0,1fr)]">
       <AppNav active="protect" />
-      <section className="px-4 py-6 md:px-8">
+      <section className="px-4 py-5 md:px-8 md:py-6">
         <div className="mx-auto max-w-6xl">
           <header className="mb-6 border-b border-outline-variant/60 pb-6">
             <p className="mb-3 inline-flex rounded border border-primary/20 bg-primary/10 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.16em] text-primary">
               LP Protection Flow
             </p>
-            <h1 className="font-display text-4xl font-semibold tracking-tight md:text-5xl">Use HookFlow to safeguard LPs</h1>
+            <h1 className="font-display text-3xl font-semibold tracking-normal md:text-5xl">Use HookFlow to safeguard LPs</h1>
             <p className="mt-3 max-w-3xl text-sm leading-6 text-on-surface-variant">
               HookFlow is for LPs who want a Uniswap v4 pool that adapts to trade risk. It does not remove LP risk, but it
               helps LPs avoid undercharging large, one-sided, or toxic flow. LPs can use the live protected pool today or
@@ -56,11 +56,11 @@ export default function ProtectPage() {
           </header>
 
         <section className="mb-5 grid gap-5 lg:grid-cols-[1fr_0.85fr]">
-          <article className="rounded-lg border border-outline-variant/60 bg-surface-container-low p-5">
+          <article className="rounded-lg border border-outline-variant/60 bg-surface-container-low p-4 md:p-5">
             <h2 className="font-display text-2xl font-semibold">How a normal LP uses it</h2>
             <div className="mt-5 grid gap-3">
               {steps.map((step, index) => (
-                <div className="grid gap-3 rounded border border-outline-variant/60 bg-background/60 p-4 md:grid-cols-[44px_1fr]" key={step.title}>
+                <div className="grid gap-3 rounded border border-outline-variant/60 bg-background/60 p-4 sm:grid-cols-[44px_1fr]" key={step.title}>
                   <div className="grid h-10 w-10 place-items-center rounded bg-primary/10 font-mono text-sm font-bold text-primary">
                     {index + 1}
                   </div>
@@ -74,7 +74,7 @@ export default function ProtectPage() {
           </article>
 
           <aside className="space-y-5">
-            <article className="rounded-lg border border-primary/20 bg-primary/10 p-5">
+            <article className="rounded-lg border border-primary/20 bg-primary/10 p-4 md:p-5">
               <h2 className="font-display text-2xl font-semibold">What it protects</h2>
               <div className="mt-4 space-y-3">
                 {protections.map((item) => (
@@ -86,7 +86,7 @@ export default function ProtectPage() {
               </div>
             </article>
 
-            <article className="rounded-lg border border-outline-variant/60 bg-surface-container-low p-5">
+            <article className="rounded-lg border border-outline-variant/60 bg-surface-container-low p-4 md:p-5">
               <h2 className="font-display text-2xl font-semibold">Important limit</h2>
               <p className="mt-3 text-sm leading-6 text-on-surface-variant">
                 HookFlow can only protect liquidity in a pool created with the HookFlow hook. It cannot be attached later
@@ -96,7 +96,7 @@ export default function ProtectPage() {
           </aside>
         </section>
 
-        <section className="mb-5 rounded-lg border border-outline-variant/60 bg-surface-container-low p-5">
+        <section className="mb-5 rounded-lg border border-outline-variant/60 bg-surface-container-low p-4 md:p-5">
           <h2 className="font-display text-2xl font-semibold">Protection presets</h2>
           <div className="mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-4">
             {presets.map(([name, detail]) => (
@@ -108,7 +108,7 @@ export default function ProtectPage() {
           </div>
         </section>
 
-        <section className="rounded-lg border border-outline-variant/60 bg-surface-container-low p-5">
+        <section className="rounded-lg border border-outline-variant/60 bg-surface-container-low p-4 md:p-5">
           <h2 className="font-display text-2xl font-semibold">User-facing product flow</h2>
           <p className="mt-3 text-sm leading-6 text-on-surface-variant">
             LP connects a wallet, chooses a pair, picks a preset, creates a protected Uniswap v4 pool, adds liquidity,

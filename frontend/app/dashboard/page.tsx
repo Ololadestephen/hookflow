@@ -64,7 +64,7 @@ function DashboardContent() {
         <div className="mx-auto max-w-6xl">
           <header className="mb-5 flex flex-col gap-4 border-b border-outline-variant/60 pb-5 md:flex-row md:items-end md:justify-between">
             <div>
-              <h1 className="font-display text-4xl font-semibold tracking-tight md:text-5xl">HookFlow Dashboard</h1>
+              <h1 className="font-display text-3xl font-semibold tracking-normal md:text-5xl">HookFlow Dashboard</h1>
               <p className="mt-2 max-w-2xl text-sm leading-6 text-on-surface-variant">
                 Judge-facing proof that the deployed Uniswap v4 hook adjusts fees for size, toxic flow, and defensive LP
                 protection.
@@ -105,8 +105,8 @@ function DashboardContent() {
         </section>
 
         <section className="mb-5 grid gap-5 lg:grid-cols-[0.9fr_1.1fr]">
-          <article className="rounded-lg border border-outline-variant/60 bg-surface-container-low p-5">
-            <div className="flex items-start justify-between gap-4">
+          <article className="rounded-lg border border-outline-variant/60 bg-surface-container-low p-4 md:p-5">
+            <div className="flex flex-col items-start justify-between gap-4 sm:flex-row">
               <div>
                 <h2 className="font-display text-2xl font-semibold">Deployment Proof</h2>
                 <p className="mt-1 text-sm text-on-surface-variant">Addresses judges can verify on OKLink.</p>
@@ -146,14 +146,14 @@ function DashboardContent() {
             </div>
           </article>
 
-          <article className="rounded-lg border border-outline-variant/60 bg-surface-container-low p-5">
+          <article className="rounded-lg border border-outline-variant/60 bg-surface-container-low p-4 md:p-5">
             <h2 className="font-display text-2xl font-semibold">Mainnet Setup Transactions</h2>
             <p className="mt-1 text-sm text-on-surface-variant">Minimum X Layer mainnet completion trail.</p>
 
             <div className="mt-5 divide-y divide-outline-variant/50 rounded border border-outline-variant/60 bg-background/60">
               {deploymentProof.map((item) => (
                 <Link
-                  className="flex items-center justify-between gap-4 px-3 py-3 text-sm hover:bg-primary/5"
+                  className="flex flex-col gap-1 px-3 py-3 text-sm hover:bg-primary/5 sm:flex-row sm:items-center sm:justify-between sm:gap-4"
                   href={txUrl(item.tx)}
                   key={item.tx}
                   target="_blank"
@@ -167,7 +167,7 @@ function DashboardContent() {
         </section>
 
         <article className="overflow-hidden rounded-lg border border-outline-variant/60 bg-surface-container-low">
-          <div className="border-b border-outline-variant/60 px-5 py-4">
+          <div className="border-b border-outline-variant/60 px-4 py-4 md:px-5">
             <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
               <div>
                 <h2 className="font-display text-2xl font-semibold">Behavior Proof</h2>

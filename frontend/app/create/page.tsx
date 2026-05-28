@@ -291,7 +291,7 @@ function CreateProtectedPoolContent() {
   return (
     <main className="min-h-screen bg-background text-on-background lg:grid lg:grid-cols-[250px_minmax(0,1fr)]">
       <AppNav active="create" />
-      <section className="px-4 py-6 md:px-8">
+      <section className="px-4 py-5 md:px-8 md:py-6">
         <div className="mx-auto max-w-6xl">
           <header className="mb-6 border-b border-outline-variant/60 pb-6">
             <div className="mb-5 flex flex-col gap-3 rounded-lg border border-outline-variant/60 bg-surface-container-low px-4 py-3 md:flex-row md:items-center md:justify-between">
@@ -305,7 +305,7 @@ function CreateProtectedPoolContent() {
                 ) : null}
               </div>
 
-              <div className="flex flex-wrap gap-3">
+              <div className="flex flex-wrap gap-2 md:gap-3">
                 {wrongNetwork ? (
                   <button
                     className="rounded bg-primary px-4 py-2 text-xs font-bold uppercase tracking-[0.14em] text-on-primary disabled:cursor-not-allowed disabled:opacity-50"
@@ -340,7 +340,7 @@ function CreateProtectedPoolContent() {
           <p className="mb-3 inline-flex rounded border border-primary/20 bg-primary/10 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.16em] text-primary">
             Self-Serve LP MVP
           </p>
-          <h1 className="font-display text-4xl font-semibold tracking-tight md:text-5xl">Create a HookFlow pool</h1>
+          <h1 className="font-display text-3xl font-semibold tracking-normal md:text-5xl">Create a HookFlow pool</h1>
           <p className="mt-3 max-w-3xl text-sm leading-6 text-on-surface-variant">
             Add liquidity to the live USDT0/WOKB protected pool, or prepare a custom token pair for an operator-approved
             HookFlow pool.
@@ -348,7 +348,7 @@ function CreateProtectedPoolContent() {
         </header>
 
         <section className="mb-5 grid gap-5 lg:grid-cols-[1fr_0.85fr]">
-          <article className="rounded-lg border border-outline-variant/60 bg-surface-container-low p-5">
+          <article className="rounded-lg border border-outline-variant/60 bg-surface-container-low p-4 md:p-5">
             <h2 className="font-display text-2xl font-semibold">Choose pool and amounts</h2>
             <p className="mt-2 text-sm leading-6 text-on-surface-variant">
               Start with the live USDT0/WOKB pool, or open a custom pair when you want to paste token contract addresses.
@@ -485,7 +485,7 @@ function CreateProtectedPoolContent() {
             </div>
           </article>
 
-          <aside className="rounded-lg border border-outline-variant/60 bg-surface-container-low p-5">
+          <aside className="rounded-lg border border-outline-variant/60 bg-surface-container-low p-4 md:p-5">
             <h2 className="font-display text-2xl font-semibold">Pool preview</h2>
             <div className="mt-5 space-y-3">
               <div className="rounded border border-outline-variant/60 bg-background/60 p-3">
@@ -518,7 +518,7 @@ function CreateProtectedPoolContent() {
           </aside>
         </section>
 
-        <section className="mb-5 rounded-lg border border-outline-variant/60 bg-surface-container-low p-5">
+        <section className="mb-5 rounded-lg border border-outline-variant/60 bg-surface-container-low p-4 md:p-5">
           <h2 className="font-display text-2xl font-semibold">Position range</h2>
           <p className="mt-2 text-sm leading-6 text-on-surface-variant">
             HookFlow uses a recommended range for the live USDT0/WOKB pool. Most LPs can leave this unchanged.
@@ -581,14 +581,14 @@ function CreateProtectedPoolContent() {
           </details>
         </section>
 
-        <section className="rounded-lg border border-outline-variant/60 bg-surface-container-low p-5">
+        <section className="rounded-lg border border-outline-variant/60 bg-surface-container-low p-4 md:p-5">
           <h2 className="font-display text-2xl font-semibold">Transaction Path</h2>
           <p className="mt-2 text-sm leading-6 text-on-surface-variant">
             For a new pair, apply a safe preset and initialize the pool first. For the live USDT0/WOKB pool, skip
             directly to token approvals and add liquidity.
           </p>
 
-          <div className="mt-5 grid gap-3 md:grid-cols-5">
+          <div className="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-5">
             <button
               className="rounded bg-primary px-4 py-3 text-xs font-bold uppercase tracking-[0.14em] text-on-primary disabled:cursor-not-allowed disabled:opacity-40"
               disabled={!isConnected || wrongNetwork || !poolId || isPending || isLiveProofPool || !canConfigurePreset}
