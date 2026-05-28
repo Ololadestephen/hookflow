@@ -1,10 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useRef } from "react";
+import { useLayoutEffect, useRef } from "react";
 
 const RING_RADIUS = 180;
-const PARTICLE_COUNT = 200;
+const PARTICLE_COUNT = 240;
 
 type Particle = {
   angle: number;
@@ -57,7 +57,7 @@ function createPulse(): Pulse {
 export default function HomePage() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const currentCanvas = canvasRef.current;
     const context = currentCanvas?.getContext("2d");
     if (!currentCanvas || !context) return;
@@ -84,9 +84,9 @@ export default function HomePage() {
       drawingContext.lineCap = "round";
       drawingContext.lineJoin = "round";
       centerX = width / 2;
-      centerY = height / 2;
+      centerY = height * (width < 768 ? 0.25 : 0.48);
       particles = Array.from({ length: PARTICLE_COUNT }, createParticle);
-      for (let step = 0; step < 18; step += 1) {
+      for (let step = 0; step < 24; step += 1) {
         particles.forEach(updateParticle);
       }
     }
@@ -94,13 +94,13 @@ export default function HomePage() {
     function drawPoolRing() {
       drawingContext.beginPath();
       drawingContext.arc(centerX, centerY, RING_RADIUS, 0, Math.PI * 2);
-      drawingContext.strokeStyle = "rgba(78, 222, 163, 0.05)";
+      drawingContext.strokeStyle = "rgba(78, 222, 163, 0.08)";
       drawingContext.lineWidth = 10;
       drawingContext.stroke();
 
       drawingContext.beginPath();
       drawingContext.arc(centerX, centerY, RING_RADIUS, 0, Math.PI * 2);
-      drawingContext.strokeStyle = "rgba(78, 222, 163, 0.1)";
+      drawingContext.strokeStyle = "rgba(78, 222, 163, 0.16)";
       drawingContext.lineWidth = 1;
       drawingContext.setLineDash([5, 15]);
       drawingContext.stroke();
@@ -128,13 +128,13 @@ export default function HomePage() {
       for (let i = 1; i < particle.history.length; i += 1) {
         drawingContext.lineTo(particle.history[i].x, particle.history[i].y);
       }
-      drawingContext.strokeStyle = `rgba(78, 222, 163, ${particle.opacity * 0.5})`;
+      drawingContext.strokeStyle = `rgba(78, 222, 163, ${particle.opacity * 0.75})`;
       drawingContext.lineWidth = particle.size;
       drawingContext.stroke();
 
       drawingContext.beginPath();
       drawingContext.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
-      drawingContext.fillStyle = `rgba(78, 222, 163, ${particle.opacity})`;
+      drawingContext.fillStyle = `rgba(78, 222, 163, ${Math.min(particle.opacity * 1.15, 0.55)})`;
       drawingContext.fill();
     }
 
@@ -179,7 +179,7 @@ export default function HomePage() {
     }
 
     function animate() {
-      if (Math.random() < 0.02) {
+      if (Math.random() < 0.03) {
         pulses.push(createPulse());
       }
       drawFrame();
@@ -226,18 +226,18 @@ export default function HomePage() {
           <div className="flex flex-col items-center justify-center gap-4 md:flex-row">
             <Link
               className="group flex w-full items-center justify-center gap-2 rounded-none bg-primary px-10 py-4 font-label-md text-label-md text-on-primary transition-all hover:shadow-[0_0_20px_rgba(78,222,163,0.3)] md:w-auto"
-              href="/create"
+              href="/dashboard"
             >
-              Create Pool
+              Dashboard
               <span className="material-symbols-outlined transition-transform group-hover:translate-x-1">arrow_forward</span>
             </Link>
 
             <Link
               className="flex w-full items-center justify-center gap-2 rounded-none border border-primary/40 px-10 py-4 font-label-md text-label-md text-primary transition-all hover:bg-primary/5 md:w-auto"
-              href="/dashboard"
+              href="/create"
             >
-              View Proof
-              <span className="material-symbols-outlined">verified</span>
+              Create Pool
+              <span className="material-symbols-outlined">add</span>
             </Link>
           </div>
         </div>
