@@ -1,9 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useRef } from "react";
+import { useLayoutEffect, useRef } from "react";
 
-const RING_RADIUS = 212;
+const RING_RADIUS = 198;
 const PARTICLE_COUNT = 220;
 
 type Particle = {
@@ -57,7 +57,7 @@ function createPulse(): Pulse {
 export default function HomePage() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const currentCanvas = canvasRef.current;
     const context = currentCanvas?.getContext("2d");
     if (!currentCanvas || !context) return;
@@ -85,7 +85,7 @@ export default function HomePage() {
       drawingContext.lineCap = "round";
       drawingContext.lineJoin = "round";
       centerX = width / 2;
-      centerY = height * 0.58;
+      centerY = height * 0.54;
       particles = Array.from({ length: PARTICLE_COUNT }, createParticle);
     }
 
@@ -160,7 +160,7 @@ export default function HomePage() {
       drawingContext.fill();
     }
 
-    function animate() {
+    function drawFrame() {
       drawingContext.clearRect(0, 0, width, height);
       drawPoolRing();
 
@@ -169,20 +169,23 @@ export default function HomePage() {
         drawParticle(particle);
       });
 
-      if (Math.random() < 0.035) {
-        pulses.push(createPulse());
-      }
-
       pulses = pulses.filter((pulse) => {
         const alive = updatePulse(pulse);
         if (alive) drawPulse(pulse);
         return alive;
       });
+    }
 
+    function animate() {
+      if (Math.random() < 0.035) {
+        pulses.push(createPulse());
+      }
+      drawFrame();
       animationFrame = requestAnimationFrame(animate);
     }
 
     init();
+    drawFrame();
     animate();
     window.addEventListener("resize", init);
 
@@ -210,7 +213,7 @@ export default function HomePage() {
 
         <div className="relative z-10 max-w-4xl px-gutter text-center">
           <h1 className="mb-6 font-display-lg text-display-lg tracking-tight text-on-background md:text-[64px]">
-            Create self-protecting <span className="text-primary">Uniswap v4</span> pools
+            Protect liquidity with adaptive <span className="text-primary">Uniswap v4</span> hooks
           </h1>
 
           <p className="mx-auto mb-10 max-w-2xl font-body-lg text-body-lg leading-relaxed text-on-surface-variant">
