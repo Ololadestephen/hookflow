@@ -42,10 +42,10 @@ function createParticle(): Particle {
   };
 }
 
-function createPulse(): Pulse {
+function createPulse(radius: number): Pulse {
   return {
     angle: Math.random() * Math.PI * 2,
-    distance: RING_RADIUS + (Math.random() - 0.5) * 40,
+    distance: radius + (Math.random() - 0.5) * 40,
     speed: 0.02 + Math.random() * 0.03,
     life: 1,
     decay: 0.005 + Math.random() * 0.01,
@@ -68,6 +68,8 @@ export default function HomePage() {
     let height = 0;
     let centerX = 0;
     let centerY = 0;
+    let currentRingRadius = RING_RADIUS;
+    let currentParticleCount = PARTICLE_COUNT;
     let particles: Particle[] = [];
     let pulses: Pulse[] = [];
     let animationFrame = 0;
@@ -75,6 +77,9 @@ export default function HomePage() {
     function init() {
       width = window.innerWidth;
       height = window.innerHeight;
+      const isMobile = width < 768;
+      currentRingRadius = isMobile ? 128 : RING_RADIUS;
+      currentParticleCount = isMobile ? 150 : PARTICLE_COUNT;
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
       drawingCanvas.width = Math.floor(width * dpr);
       drawingCanvas.height = Math.floor(height * dpr);
@@ -84,8 +89,8 @@ export default function HomePage() {
       drawingContext.lineCap = "round";
       drawingContext.lineJoin = "round";
       centerX = width / 2;
-      centerY = height * (width < 768 ? 0.25 : 0.48);
-      particles = Array.from({ length: PARTICLE_COUNT }, createParticle);
+      centerY = height * (isMobile ? 0.21 : 0.48);
+      particles = Array.from({ length: currentParticleCount }, createParticle);
       for (let step = 0; step < 24; step += 1) {
         particles.forEach(updateParticle);
       }
@@ -93,13 +98,13 @@ export default function HomePage() {
 
     function drawPoolRing() {
       drawingContext.beginPath();
-      drawingContext.arc(centerX, centerY, RING_RADIUS, 0, Math.PI * 2);
+      drawingContext.arc(centerX, centerY, currentRingRadius, 0, Math.PI * 2);
       drawingContext.strokeStyle = "rgba(78, 222, 163, 0.08)";
       drawingContext.lineWidth = 10;
       drawingContext.stroke();
 
       drawingContext.beginPath();
-      drawingContext.arc(centerX, centerY, RING_RADIUS, 0, Math.PI * 2);
+      drawingContext.arc(centerX, centerY, currentRingRadius, 0, Math.PI * 2);
       drawingContext.strokeStyle = "rgba(78, 222, 163, 0.16)";
       drawingContext.lineWidth = 1;
       drawingContext.setLineDash([5, 15]);
@@ -180,7 +185,7 @@ export default function HomePage() {
 
     function animate() {
       if (Math.random() < 0.03) {
-        pulses.push(createPulse());
+        pulses.push(createPulse(currentRingRadius));
       }
       drawFrame();
       animationFrame = requestAnimationFrame(animate);
@@ -199,33 +204,40 @@ export default function HomePage() {
 
   return (
     <main className="min-h-screen overflow-x-hidden bg-background text-on-background selection:bg-primary selection:text-on-primary">
-      <header className="fixed right-0 top-0 z-40 flex h-14 w-full items-center justify-center bg-surface/60 px-margin-mobile backdrop-blur-md md:h-16 md:justify-end md:px-margin-desktop">
+      <header className="fixed left-1/2 top-3 z-40 flex w-[calc(100%-1.5rem)] max-w-[420px] -translate-x-1/2 items-center justify-center rounded-full border border-white/8 bg-surface/85 px-4 py-3 backdrop-blur-md md:left-0 md:top-0 md:w-full md:max-w-none md:translate-x-0 md:justify-end md:rounded-none md:border-0 md:border-b md:border-white/5 md:bg-surface/60 md:px-margin-desktop md:py-0 md:h-16">
         <div className="flex items-center gap-6">
-          <button className="cursor-pointer rounded-lg bg-primary px-4 py-2 font-label-md text-[11px] text-on-primary transition-transform hover:scale-105 active:opacity-80 md:px-6 md:text-label-md">
+          <button className="cursor-pointer rounded-full bg-primary px-4 py-2 font-label-md text-[11px] text-on-primary transition-transform hover:scale-105 active:opacity-80 md:rounded-lg md:px-6 md:text-label-md">
             X Layer Mainnet
           </button>
         </div>
       </header>
 
-      <section className="relative flex min-h-[100svh] flex-col items-center justify-center overflow-hidden px-4 pb-10 pt-20 md:px-0 md:pb-0 md:pt-16">
+      <section className="relative flex min-h-[100svh] flex-col items-center justify-center overflow-hidden px-4 pb-12 pt-24 md:px-0 md:pb-0 md:pt-16">
         <div className="pointer-events-none absolute inset-0 z-0 flex items-center justify-center">
-          <div className="orb-glow absolute h-[800px] w-[800px] rounded-full opacity-40" />
-          <canvas ref={canvasRef} className="h-full w-full" id="liquidity-currents-canvas" />
+          <div className="orb-glow absolute h-[640px] w-[640px] rounded-full opacity-30 md:h-[800px] md:w-[800px] md:opacity-40" />
+          <canvas ref={canvasRef} className="h-full w-full opacity-90 md:opacity-100" id="liquidity-currents-canvas" />
         </div>
 
         <div className="relative z-10 w-full max-w-4xl px-0 text-center md:px-gutter">
-          <h1 className="mx-auto mb-5 max-w-[680px] font-display-lg text-[44px] leading-[1.02] tracking-normal text-on-background sm:text-[52px] md:max-w-none md:text-[64px]">
+          <div className="mx-auto mb-6 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-surface-container/70 px-3 py-1.5 backdrop-blur-md md:mb-8">
+            <span className="h-2 w-2 rounded-full bg-primary" />
+            <span className="font-label-md text-[11px] uppercase tracking-[0.18em] text-primary md:text-label-md">
+              Self-protecting LP pools
+            </span>
+          </div>
+
+          <h1 className="mx-auto mb-5 max-w-[680px] font-display-lg text-[40px] leading-[0.98] tracking-tight text-on-background sm:text-[52px] md:max-w-none md:text-[64px]">
             Protect liquidity with adaptive <span className="text-primary">Uniswap v4</span> hooks
           </h1>
 
-          <p className="mx-auto mb-8 max-w-2xl font-body-lg text-base leading-7 text-on-surface-variant md:mb-10 md:text-body-lg">
+          <p className="mx-auto mb-8 max-w-[34rem] px-2 font-body-lg text-[15px] leading-7 text-on-surface-variant md:mb-10 md:px-0 md:text-body-lg">
             HookFlow lets LPs launch X Layer pools with adaptive fees, size-aware pricing, and toxic-flow protection.
             Choose a safe preset, add liquidity, and let risky flow pay more.
           </p>
 
-          <div className="mx-auto flex max-w-md flex-col items-stretch justify-center gap-3 md:max-w-none md:flex-row md:items-center md:gap-4">
+          <div className="mx-auto flex max-w-[20rem] flex-col items-stretch justify-center gap-3 sm:max-w-md md:max-w-none md:flex-row md:items-center md:gap-4">
             <Link
-              className="group flex w-full items-center justify-center gap-2 rounded-none bg-primary px-8 py-4 font-label-md text-label-md text-on-primary transition-all hover:shadow-[0_0_20px_rgba(78,222,163,0.3)] md:w-auto md:px-10"
+              className="group flex w-full items-center justify-center gap-2 rounded-none bg-primary px-7 py-4 font-label-md text-label-md text-on-primary transition-all hover:shadow-[0_0_20px_rgba(78,222,163,0.3)] md:w-auto md:px-10"
               href="/dashboard"
             >
               Dashboard
@@ -233,7 +245,7 @@ export default function HomePage() {
             </Link>
 
             <Link
-              className="flex w-full items-center justify-center gap-2 rounded-none border border-primary/40 px-8 py-4 font-label-md text-label-md text-primary transition-all hover:bg-primary/5 md:w-auto md:px-10"
+              className="flex w-full items-center justify-center gap-2 rounded-none border border-primary/40 px-7 py-4 font-label-md text-label-md text-primary transition-all hover:bg-primary/5 md:w-auto md:px-10"
               href="/create"
             >
               Create Pool
