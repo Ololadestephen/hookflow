@@ -108,3 +108,262 @@ export const flowEvents = [
     tx: "0x2ebed6d3b46fdd45a049910fbb61c86e88cc82ca17fd65d6167e655fc96665eb"
   }
 ] as const;
+
+export const botChainDeployment = {
+  chainName: "BOT Chain Mainnet",
+  chainId: 677,
+  rpcUrl: "https://rpc.botchain.ai",
+  explorerBaseUrl: "https://scan.botchain.ai",
+  websiteUrl: "https://botchain.ai",
+  // Default placeholder address or configured env address
+  treasuryVault: (process.env.NEXT_PUBLIC_TREASURY_VAULT_ADDRESS || "0x0000000000000000000000000000000000000000") as `0x${string}`
+} as const;
+
+export const hookflowTreasuryVaultAbi = [
+  {
+    type: "function",
+    name: "createVault",
+    stateMutability: "payable",
+    inputs: [
+      {
+        name: "initialPolicy",
+        type: "tuple",
+        components: [
+          { name: "maxPayoutAmount", type: "uint256" },
+          { name: "dailyLimit", type: "uint256" },
+          { name: "burstWindowSeconds", type: "uint32" },
+          { name: "burstThresholdCount", type: "uint16" },
+          { name: "cooldownSeconds", type: "uint32" }
+        ]
+      }
+    ],
+    outputs: [{ name: "vaultId", type: "uint256" }]
+  },
+  {
+    type: "function",
+    name: "deposit",
+    stateMutability: "payable",
+    inputs: [{ name: "vaultId", type: "uint256" }],
+    outputs: []
+  },
+  {
+    type: "function",
+    name: "withdraw",
+    stateMutability: "nonpayable",
+    inputs: [
+      { name: "vaultId", type: "uint256" },
+      { name: "amount", type: "uint256" }
+    ],
+    outputs: []
+  },
+  {
+    type: "function",
+    name: "setPolicy",
+    stateMutability: "nonpayable",
+    inputs: [
+      { name: "vaultId", type: "uint256" },
+      {
+        name: "newPolicy",
+        type: "tuple",
+        components: [
+          { name: "maxPayoutAmount", type: "uint256" },
+          { name: "dailyLimit", type: "uint256" },
+          { name: "burstWindowSeconds", type: "uint32" },
+          { name: "burstThresholdCount", type: "uint16" },
+          { name: "cooldownSeconds", type: "uint32" }
+        ]
+      }
+    ],
+    outputs: []
+  },
+  {
+    type: "function",
+    name: "setOperator",
+    stateMutability: "nonpayable",
+    inputs: [
+      { name: "vaultId", type: "uint256" },
+      { name: "operator", type: "address" },
+      { name: "approved", type: "bool" }
+    ],
+    outputs: []
+  },
+  {
+    type: "function",
+    name: "setRecipient",
+    stateMutability: "nonpayable",
+    inputs: [
+      { name: "vaultId", type: "uint256" },
+      { name: "recipient", type: "address" },
+      { name: "approved", type: "bool" }
+    ],
+    outputs: []
+  },
+  {
+    type: "function",
+    name: "setPaused",
+    stateMutability: "nonpayable",
+    inputs: [
+      { name: "vaultId", type: "uint256" },
+      { name: "paused", type: "bool" }
+    ],
+    outputs: []
+  },
+  {
+    type: "function",
+    name: "payout",
+    stateMutability: "nonpayable",
+    inputs: [
+      { name: "vaultId", type: "uint256" },
+      { name: "recipient", type: "address" },
+      { name: "amount", type: "uint256" }
+    ],
+    outputs: []
+  },
+  {
+    type: "function",
+    name: "getPayoutStatus",
+    stateMutability: "view",
+    inputs: [{ name: "vaultId", type: "uint256" }],
+    outputs: [
+      { name: "balance", type: "uint256" },
+      { name: "remainingDailyAllowance", type: "uint256" },
+      { name: "dailySpent", type: "uint256" },
+      { name: "currentDay", type: "uint64" },
+      { name: "isCooldownActive", type: "bool" },
+      { name: "cooldownUntil", type: "uint64" },
+      { name: "currentBurstCount", type: "uint16" },
+      { name: "burstWindowStart", type: "uint64" },
+      { name: "paused", type: "bool" }
+    ]
+  },
+  {
+    type: "function",
+    name: "vaults",
+    stateMutability: "view",
+    inputs: [{ name: "", type: "uint256" }],
+    outputs: [
+      { name: "owner", type: "address" },
+      { name: "paused", type: "bool" },
+      { name: "currentDayIndex", type: "uint64" },
+      { name: "burstWindowStart", type: "uint64" },
+      { name: "cooldownUntil", type: "uint64" },
+      { name: "burstCount", type: "uint16" },
+      { name: "balance", type: "uint256" },
+      { name: "totalDeposited", type: "uint256" },
+      { name: "totalPaidOut", type: "uint256" },
+      { name: "totalWithdrawn", type: "uint256" },
+      { name: "dailySpentAmount", type: "uint256" }
+    ]
+  },
+  {
+    type: "function",
+    name: "vaultPolicies",
+    stateMutability: "view",
+    inputs: [{ name: "", type: "uint256" }],
+    outputs: [
+      { name: "maxPayoutAmount", type: "uint256" },
+      { name: "dailyLimit", type: "uint256" },
+      { name: "burstWindowSeconds", type: "uint32" },
+      { name: "burstThresholdCount", type: "uint16" },
+      { name: "cooldownSeconds", type: "uint32" }
+    ]
+  },
+  {
+    type: "function",
+    name: "isOperator",
+    stateMutability: "view",
+    inputs: [
+      { name: "", type: "uint256" },
+      { name: "", type: "address" }
+    ],
+    outputs: [{ name: "", type: "bool" }]
+  },
+  {
+    type: "function",
+    name: "isRecipient",
+    stateMutability: "view",
+    inputs: [
+      { name: "", type: "uint256" },
+      { name: "", type: "address" }
+    ],
+    outputs: [{ name: "", type: "bool" }]
+  },
+  {
+    type: "function",
+    name: "vaultCount",
+    stateMutability: "view",
+    inputs: [],
+    outputs: [{ name: "", type: "uint256" }]
+  },
+  {
+    type: "event",
+    name: "VaultCreated",
+    inputs: [
+      { name: "vaultId", type: "uint256", indexed: true },
+      { name: "owner", type: "address", indexed: true },
+      { name: "initialDeposit", type: "uint256", indexed: false },
+      {
+        name: "policy",
+        type: "tuple",
+        indexed: false,
+        components: [
+          { name: "maxPayoutAmount", type: "uint256" },
+          { name: "dailyLimit", type: "uint256" },
+          { name: "burstWindowSeconds", type: "uint32" },
+          { name: "burstThresholdCount", type: "uint16" },
+          { name: "cooldownSeconds", type: "uint32" }
+        ]
+      }
+    ]
+  },
+  {
+    type: "event",
+    name: "Deposited",
+    inputs: [
+      { name: "vaultId", type: "uint256", indexed: true },
+      { name: "sender", type: "address", indexed: true },
+      { name: "amount", type: "uint256", indexed: false },
+      { name: "newBalance", type: "uint256", indexed: false }
+    ]
+  },
+  {
+    type: "event",
+    name: "Withdrawn",
+    inputs: [
+      { name: "vaultId", type: "uint256", indexed: true },
+      { name: "owner", type: "address", indexed: true },
+      { name: "amount", type: "uint256", indexed: false },
+      { name: "newBalance", type: "uint256", indexed: false }
+    ]
+  },
+  {
+    type: "event",
+    name: "PayoutExecuted",
+    inputs: [
+      { name: "vaultId", type: "uint256", indexed: true },
+      { name: "operator", type: "address", indexed: true },
+      { name: "recipient", type: "address", indexed: true },
+      { name: "amount", type: "uint256", indexed: false },
+      { name: "newBalance", type: "uint256", indexed: false },
+      { name: "dailySpent", type: "uint256", indexed: false },
+      { name: "burstCount", type: "uint16", indexed: false },
+      { name: "cooldownUntil", type: "uint64", indexed: false }
+    ]
+  },
+  {
+    type: "event",
+    name: "CooldownTriggered",
+    inputs: [
+      { name: "vaultId", type: "uint256", indexed: true },
+      { name: "cooldownUntil", type: "uint64", indexed: false }
+    ]
+  },
+  {
+    type: "event",
+    name: "VaultPaused",
+    inputs: [
+      { name: "vaultId", type: "uint256", indexed: true },
+      { name: "paused", type: "bool", indexed: false }
+    ]
+  }
+] as const;

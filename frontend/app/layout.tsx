@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "HookFlow Console",
-  description: "Liquidity intelligence dashboard for the HookFlow Uniswap v4 hook on X Layer."
+  title: "HookFlow | BOT Chain Mainnet Treasury Guard",
+  description: "Bounded native-BOT treasury payout guard with shared daily limits, burst rate-limiting, and automated cooldown defense on BOT Chain Mainnet."
 };
 
 export default function RootLayout({

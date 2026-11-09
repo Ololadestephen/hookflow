@@ -32,3 +32,6 @@ pnpm-debug.log*
 
 # Misc local files
 *.log
+
+# Unrelated nested projects
+keylessflow/

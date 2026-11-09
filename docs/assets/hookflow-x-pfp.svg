@@ -1,0 +1,157 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800" width="800" height="800">
+  <defs>
+    <!-- Background Gradient -->
+    <radialGradient id="bg-grad" cx="50%" cy="45%" r="65%">
+      <stop offset="0%" stop-color="#0c261e"/>
+      <stop offset="45%" stop-color="#071813"/>
+      <stop offset="100%" stop-color="#030c09"/>
+    </radialGradient>
+
+    <!-- Emerald Glow -->
+    <radialGradient id="core-glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#4edea3" stop-opacity="0.35"/>
+      <stop offset="60%" stop-color="#10b981" stop-opacity="0.12"/>
+      <stop offset="100%" stop-color="#051a13" stop-opacity="0"/>
+    </radialGradient>
+
+    <!-- Shield Gradient - Left -->
+    <linearGradient id="shield-left" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#6ffbbe"/>
+      <stop offset="40%" stop-color="#4edea3"/>
+      <stop offset="100%" stop-color="#0f5139"/>
+    </linearGradient>
+
+    <!-- Shield Gradient - Right -->
+    <linearGradient id="shield-right" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#34d399"/>
+      <stop offset="60%" stop-color="#0b5e3f"/>
+      <stop offset="100%" stop-color="#063222"/>
+    </linearGradient>
+
+    <!-- Inner Core Flow Gradient -->
+    <linearGradient id="hook-flow" x1="20%" y1="0%" x2="80%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="30%" stop-color="#6ffbbe"/>
+      <stop offset="70%" stop-color="#10b981"/>
+      <stop offset="100%" stop-color="#043824"/>
+    </linearGradient>
+
+    <!-- Wordmark Gradient -->
+    <linearGradient id="text-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="100%" stop-color="#d5e6df"/>
+    </linearGradient>
+
+    <!-- Shadow filter -->
+    <filter id="neon-glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="16" result="blur"/>
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    </filter>
+  </defs>
+
+  <!-- Background Base -->
+  <rect width="800" height="800" fill="url(#bg-grad)"/>
+
+  <!-- Subtle Concentric Radar Rings & Orbital Guides -->
+  <circle cx="400" cy="380" r="320" fill="none" stroke="#4edea3" stroke-width="1" stroke-opacity="0.08" stroke-dasharray="8 12"/>
+  <circle cx="400" cy="380" r="260" fill="none" stroke="#4edea3" stroke-width="1" stroke-opacity="0.12"/>
+  <circle cx="400" cy="380" r="200" fill="none" stroke="#6ffbbe" stroke-width="1.5" stroke-opacity="0.18" stroke-dasharray="14 18"/>
+  <circle cx="400" cy="380" r="140" fill="none" stroke="#4edea3" stroke-width="1" stroke-opacity="0.22"/>
+
+  <!-- Radial Core Ambient Glow -->
+  <circle cx="400" cy="380" r="220" fill="url(#core-glow)"/>
+
+  <!-- Flow Vector Rays (representing liquidity & flow control) -->
+  <g opacity="0.4">
+    <line x1="400" y1="90" x2="400" y2="130" stroke="#4edea3" stroke-width="2" stroke-linecap="round"/>
+    <line x1="400" y1="630" x2="400" y2="670" stroke="#4edea3" stroke-width="2" stroke-linecap="round"/>
+    <line x1="110" y1="380" x2="150" y2="380" stroke="#4edea3" stroke-width="2" stroke-linecap="round"/>
+    <line x1="650" y1="380" x2="690" y2="380" stroke="#4edea3" stroke-width="2" stroke-linecap="round"/>
+  </g>
+
+  <!-- Orbiting Data Nodes -->
+  <circle cx="610" cy="240" r="4.5" fill="#6ffbbe" opacity="0.8"/>
+  <circle cx="190" cy="510" r="4" fill="#4edea3" opacity="0.7"/>
+  <circle cx="230" cy="220" r="3" fill="#ffffff" opacity="0.6"/>
+  <circle cx="580" cy="490" r="3.5" fill="#6ffbbe" opacity="0.6"/>
+
+  <!-- Central Insignia: Hook + Flow Channel + Protective Shield -->
+  <g transform="translate(0, -10)" filter="url(#neon-glow)">
+    <!-- Outer Protective Shield Boundary -->
+    <path d="M 400 170 
+             C 480 170, 540 195, 560 250 
+             C 560 380, 480 470, 400 520 
+             C 320 470, 240 380, 240 250 
+             C 260 195, 320 170, 400 170 Z" 
+          fill="none" 
+          stroke="#4edea3" 
+          stroke-width="2.5" 
+          stroke-opacity="0.4"/>
+
+    <!-- Left Shield Wing / Facet -->
+    <path d="M 400 185 
+             C 400 185, 300 215, 275 270 
+             C 275 375, 340 445, 400 488 
+             Z" 
+          fill="url(#shield-left)" 
+          stroke="#6ffbbe" 
+          stroke-width="2" 
+          stroke-linejoin="round"/>
+
+    <!-- Right Shield Wing / Facet -->
+    <path d="M 400 185 
+             C 400 185, 500 215, 525 270 
+             C 525 375, 460 445, 400 488 
+             Z" 
+          fill="url(#shield-right)" 
+          stroke="#34d399" 
+          stroke-width="2" 
+          stroke-linejoin="round"/>
+
+    <!-- Dynamic Flow Channel Curve / Hook (Sweeping from top right through center down to hook tip) -->
+    <path d="M 430 220 
+             C 470 230, 480 270, 455 310 
+             C 435 345, 375 355, 350 390 
+             C 330 420, 350 455, 385 455 
+             C 415 455, 440 435, 445 410 
+             C 445 390, 430 380, 420 385 
+             C 410 390, 412 405, 420 410 
+             C 422 412, 420 425, 400 425 
+             C 380 425, 370 405, 385 385 
+             C 410 350, 480 340, 500 280 
+             C 515 235, 480 195, 430 195 
+             Z" 
+          fill="url(#hook-flow)" 
+          stroke="#ffffff" 
+          stroke-width="1.5" 
+          stroke-linejoin="round"/>
+
+    <!-- Central Luminous Power Core -->
+    <circle cx="400" cy="350" r="12" fill="#4edea3" opacity="0.6"/>
+    <circle cx="400" cy="350" r="6.5" fill="#ffffff"/>
+    <circle cx="400" cy="350" r="3" fill="#6ffbbe"/>
+  </g>
+
+  <!-- Brand Typography & Sub-Badge -->
+  <g id="brand-footer" transform="translate(0, 0)">
+    <!-- Brand Wordmark -->
+    <text x="400" y="670" 
+          font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" 
+          font-size="34" 
+          font-weight="800" 
+          letter-spacing="9" 
+          fill="url(#text-grad)" 
+          text-anchor="middle">HOOKFLOW</text>
+
+    <!-- BOT CHAIN • 677 Badge -->
+    <rect x="270" y="694" width="260" height="28" rx="14" fill="#082017" stroke="#4edea3" stroke-width="1.2" stroke-opacity="0.8"/>
+    <circle cx="288" cy="708" r="4.5" fill="#4edea3"/>
+    <text x="405" y="713" 
+          font-family="-apple-system, BlinkMacSystemFont, 'SF Mono', Menlo, Consolas, monospace" 
+          font-size="11" 
+          font-weight="700" 
+          letter-spacing="2.5" 
+          fill="#4edea3" 
+          text-anchor="middle">BOT CHAIN • 677</text>
+  </g>
+</svg>

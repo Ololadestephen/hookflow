@@ -2,6 +2,27 @@ import { http, createConfig } from "wagmi";
 import { defineChain } from "viem";
 import { injected } from "wagmi/connectors";
 
+export const botChain = defineChain({
+  id: 677,
+  name: "BOT Chain Mainnet",
+  nativeCurrency: {
+    decimals: 18,
+    name: "BOT",
+    symbol: "BOT"
+  },
+  rpcUrls: {
+    default: {
+      http: ["https://rpc.botchain.ai"]
+    }
+  },
+  blockExplorers: {
+    default: {
+      name: "BOT Chain Explorer",
+      url: "https://scan.botchain.ai"
+    }
+  }
+});
+
 export const xLayer = defineChain({
   id: 196,
   name: "X Layer",
@@ -24,10 +45,10 @@ export const xLayer = defineChain({
 });
 
 export const wagmiConfig = createConfig({
-  chains: [xLayer],
+  chains: [botChain],
   connectors: [injected()],
   transports: {
-    [xLayer.id]: http()
+    [botChain.id]: http()
   },
   ssr: true
 });

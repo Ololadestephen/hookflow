@@ -206,9 +206,10 @@ export default function HomePage() {
     <main className="min-h-screen overflow-x-hidden bg-background text-on-background selection:bg-primary selection:text-on-primary">
       <header className="fixed right-3 top-3 z-40 flex items-center justify-end md:right-0 md:top-0 md:h-16 md:w-full md:rounded-none md:border-0 md:border-b md:border-white/5 md:bg-surface/60 md:px-margin-desktop md:py-0">
         <div className="flex items-center gap-6">
-          <button className="cursor-pointer rounded-full border border-primary/25 bg-primary px-3 py-2 font-label-md text-[10px] text-on-primary shadow-[0_0_18px_rgba(78,222,163,0.2)] transition-transform hover:scale-105 active:opacity-80 md:rounded-lg md:px-6 md:py-2 md:text-label-md md:shadow-none">
-            X Layer Mainnet
-          </button>
+          <div className="flex items-center gap-2 rounded-full border border-primary/25 bg-surface-container-high/90 px-4 py-1.5 font-label-md text-xs font-semibold text-primary backdrop-blur-md">
+            <span className="h-2 w-2 rounded-full bg-primary animate-pulse" />
+            BOT Chain Mainnet (Chain ID 677)
+          </div>
         </div>
       </header>
 
@@ -219,36 +220,54 @@ export default function HomePage() {
         </div>
 
         <div className="relative z-10 w-full max-w-4xl px-0 text-center md:px-gutter">
-          
-        
+          <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-3.5 py-1 text-xs font-bold uppercase tracking-[0.16em] text-primary">
+            <span className="h-1.5 w-1.5 rounded-full bg-primary" />
+            BOT Chain Mainnet • Bounded Flow Guard
+          </div>
 
-          <h1 className="mx-auto mb-5 max-w-[680px] font-display-lg text-[40px] leading-[0.98] tracking-tight text-on-background sm:text-[52px] md:max-w-none md:text-[64px]">
-            Protect liquidity with adaptive <span className="text-primary">Uniswap v4</span> hooks
+          <h1 className="mx-auto mb-5 max-w-[720px] font-display-lg text-[40px] leading-[0.98] tracking-tight text-on-background sm:text-[52px] md:max-w-none md:text-[64px]">
+            Guard native treasury payouts on <span className="text-primary">BOT Chain</span>
           </h1>
 
-          <p className="mx-auto mb-8 max-w-[34rem] px-2 font-body-lg text-[15px] leading-7 text-on-surface-variant md:mb-10 md:px-0 md:text-body-lg">
-            HookFlow lets LPs launch X Layer pools with adaptive fees, size-aware pricing, and toxic-flow protection.
-            Choose a safe preset, add liquidity, and let risky flow pay more.
+          <p className="mx-auto mb-8 max-w-[36rem] px-2 font-body-lg text-[15px] leading-7 text-on-surface-variant md:mb-10 md:px-0 md:text-body-lg">
+            HookFlow lets protocols, teams, and autonomous agents protect native BOT treasuries with isolated balances,
+            shared daily limits across operators, and automated burst cooldown defense on BOT Chain Mainnet.
           </p>
 
-          <div className="mx-auto flex max-w-[20rem] flex-col items-stretch justify-center gap-3 sm:max-w-md md:max-w-none md:flex-row md:items-center md:gap-4">
+          <div className="mx-auto flex max-w-[22rem] flex-col items-stretch justify-center gap-3 sm:max-w-md md:max-w-none md:flex-row md:items-center md:gap-4">
             <Link
-              className="group flex w-full items-center justify-center gap-2 rounded-none bg-primary px-7 py-4 font-label-md text-label-md text-on-primary transition-all hover:shadow-[0_0_20px_rgba(78,222,163,0.3)] md:w-auto md:px-10"
-              href="/dashboard"
+              className="group flex w-full items-center justify-center gap-2 rounded-none bg-primary px-7 py-4 font-label-md text-label-md font-bold text-on-primary transition-all hover:shadow-[0_0_20px_rgba(78,222,163,0.3)] md:w-auto md:px-10"
+              href="/treasury"
             >
-              Dashboard
-              <span className="material-symbols-outlined transition-transform group-hover:translate-x-1">arrow_forward</span>
+              Launch Treasury Guard
+              <span className="material-symbols-outlined transition-transform group-hover:translate-x-1">shield</span>
             </Link>
 
-            <Link
+            <a
               className="flex w-full items-center justify-center gap-2 rounded-none border border-primary/40 px-7 py-4 font-label-md text-label-md text-primary transition-all hover:bg-primary/5 md:w-auto md:px-10"
-              href="/create"
+              href="https://scan.botchain.ai"
+              target="_blank"
+              rel="noreferrer"
             >
-              Create Pool
-              <span className="material-symbols-outlined">add</span>
-            </Link>
+              BOT Chain Explorer
+              <span className="material-symbols-outlined">open_in_new</span>
+            </a>
           </div>
         </div>
+
+        <footer className="absolute bottom-4 left-0 right-0 z-20 hidden md:block">
+          <div className="mx-auto flex max-w-6xl items-center justify-between px-8 text-xs text-on-surface-variant">
+            <span>HookFlow · Native BOT Treasury Guard on BOT Chain Mainnet</span>
+            <div className="flex gap-6">
+              <a href="https://botchain.ai" target="_blank" rel="noreferrer" className="hover:text-primary transition-colors">
+                BOT Chain Website ↗
+              </a>
+              <a href="https://scan.botchain.ai" target="_blank" rel="noreferrer" className="hover:text-primary transition-colors">
+                BOT Chain Explorer ↗
+              </a>
+            </div>
+          </div>
+        </footer>
       </section>
     </main>
   );
